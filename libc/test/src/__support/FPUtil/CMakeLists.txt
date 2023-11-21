@@ -22,6 +22,16 @@ add_libc_test(
     libc.src.__support.FPUtil.fpbits_str
 )
 
+add_libc_test(
+  float_representation_test
+  SUITE
+    libc-fputil-tests
+  SRCS
+    float_representation_test.cpp
+  DEPENDS
+   libc.src.__support.FPUtil.float_representation
+)
+
 add_fp_unittest(
   rounding_mode_test
   SUITE
