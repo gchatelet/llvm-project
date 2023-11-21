@@ -862,6 +862,14 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_fputil_float_representation",
+    hdrs = ["src/__support/FPUtil/FloatRepresentation.h"],
+    deps = [
+        ":__support_cpp_expected",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_syscall",
     hdrs = ["src/__support/OSUtil/syscall.h"],
     textual_hdrs = [

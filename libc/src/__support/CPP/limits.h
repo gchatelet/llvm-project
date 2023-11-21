@@ -9,7 +9,10 @@
 #ifndef LLVM_LIBC_SRC___SUPPORT_CPP_LIMITS_H
 #define LLVM_LIBC_SRC___SUPPORT_CPP_LIMITS_H
 
+#include "src/__support/macros/attributes.h"
+#include <float.h>
 #include <limits.h>
+#include <math.h>
 
 namespace LIBC_NAMESPACE {
 namespace cpp {
@@ -94,6 +97,56 @@ public:
   static constexpr __uint128_t min() { return 0; }
 };
 #endif
+
+// floating point types
+
+template <> struct numeric_limits<float> {
+  static constexpr float denorm_min() { return FLT_TRUE_MIN; }
+  static constexpr float min() { return FLT_MIN; }
+  static constexpr float lowest() { return -FLT_MAX; }
+  static constexpr float max() { return FLT_MAX; }
+  static constexpr float epsilon() { return FLT_EPSILON; }
+  // static constexpr float infinity() { return HUGE_VALF; }
+  LIBC_INLINE_VAR static constexpr int digits = FLT_MANT_DIG;
+  LIBC_INLINE_VAR static constexpr int digits10 = FLT_DIG;
+  LIBC_INLINE_VAR static constexpr int min_exponent = FLT_MIN_EXP;
+  LIBC_INLINE_VAR static constexpr int min_exponent10 = FLT_MIN_10_EXP;
+  LIBC_INLINE_VAR static constexpr int max_exponent = FLT_MAX_EXP;
+  LIBC_INLINE_VAR static constexpr int max_exponent10 = FLT_MAX_10_EXP;
+  LIBC_INLINE_VAR static constexpr int radix = FLT_RADIX;
+};
+
+template <> struct numeric_limits<double> {
+  static constexpr double denorm_min() { return DBL_TRUE_MIN; }
+  static constexpr double min() { return DBL_MIN; }
+  static constexpr double lowest() { return -DBL_MAX; }
+  static constexpr double max() { return DBL_MAX; }
+  static constexpr double epsilon() { return DBL_EPSILON; }
+  // static constexpr double infinity() { return HUGE_VAL; }
+  LIBC_INLINE_VAR static constexpr int digits = DBL_MANT_DIG;
+  LIBC_INLINE_VAR static constexpr int digits10 = DBL_DIG;
+  LIBC_INLINE_VAR static constexpr int min_exponent = DBL_MIN_EXP;
+  LIBC_INLINE_VAR static constexpr int min_exponent10 = DBL_MIN_10_EXP;
+  LIBC_INLINE_VAR static constexpr int max_exponent = DBL_MAX_EXP;
+  LIBC_INLINE_VAR static constexpr int max_exponent10 = DBL_MAX_10_EXP;
+  LIBC_INLINE_VAR static constexpr int radix = FLT_RADIX;
+};
+
+template <> struct numeric_limits<long double> {
+  static constexpr long double denorm_min() { return LDBL_TRUE_MIN; }
+  static constexpr long double min() { return LDBL_MIN; }
+  static constexpr long double lowest() { return -LDBL_MAX; }
+  static constexpr long double max() { return LDBL_MAX; }
+  static constexpr long double epsilon() { return LDBL_EPSILON; }
+  // static constexpr long double infinity() { return HUGE_VALL; }
+  LIBC_INLINE_VAR static constexpr int digits = LDBL_MANT_DIG;
+  LIBC_INLINE_VAR static constexpr int digits10 = LDBL_DIG;
+  LIBC_INLINE_VAR static constexpr int min_exponent = LDBL_MIN_EXP;
+  LIBC_INLINE_VAR static constexpr int min_exponent10 = LDBL_MIN_10_EXP;
+  LIBC_INLINE_VAR static constexpr int max_exponent = LDBL_MAX_EXP;
+  LIBC_INLINE_VAR static constexpr int max_exponent10 = LDBL_MAX_10_EXP;
+  LIBC_INLINE_VAR static constexpr int radix = FLT_RADIX;
+};
 
 } // namespace cpp
 } // namespace LIBC_NAMESPACE

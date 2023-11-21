@@ -24,6 +24,14 @@ add_header_library(
 )
 
 add_header_library(
+  float_representation
+  HDRS
+   FloatRepresentation.h
+  DEPENDS
+   libc.src.__support.uint128
+)
+
+add_header_library(
   platform_defs
   HDRS
     PlatformDefs.h
