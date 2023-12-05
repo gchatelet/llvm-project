@@ -57,7 +57,7 @@ template <typename T> LIBC_INLINE cpp::string str(fputil::FPBits<T> x) {
   s += exponent.view();
 
   if constexpr (cpp::is_same_v<T, long double> &&
-                fputil::FloatProperties<long double>::MANTISSA_WIDTH == 63) {
+                fputil::FloatProperties<long double>::MANTISSA_WIDTH == 63) {  // FLOAT80 MANTISSA
     s += ", I: ";
     s += sign_char(x.get_implicit_bit());
   }

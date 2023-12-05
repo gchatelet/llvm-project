@@ -151,7 +151,7 @@ eisel_lemire(ExpandedFloat<T> init_num,
   // it's 6 bits for floats in this case.
   const uint64_t halfway_constant =
       (uint64_t(1) << (BITS_IN_MANTISSA -
-                       fputil::FloatProperties<T>::MANTISSA_WIDTH - 3)) -
+                       fputil::FloatProperties<T>::MANTISSA_WIDTH - 3)) -// FLOAT80 MANTISSA
       1;
   if ((high64(first_approx) & halfway_constant) == halfway_constant &&
       low64(first_approx) + mantissa < mantissa) {
@@ -176,7 +176,7 @@ eisel_lemire(ExpandedFloat<T> init_num,
   BitsType final_mantissa =
       static_cast<BitsType>(high64(final_approx) >>
                             (msb + BITS_IN_MANTISSA -
-                             (fputil::FloatProperties<T>::MANTISSA_WIDTH + 3)));
+                             (fputil::FloatProperties<T>::MANTISSA_WIDTH + 3)));// FLOAT80 MANTISSA
   exp2 -= static_cast<uint32_t>(1 ^ msb); // same as !msb
 
   if (round == RoundDirection::Nearest) {
@@ -202,7 +202,7 @@ eisel_lemire(ExpandedFloat<T> init_num,
 
   // From 54 to 53 bits for doubles and 25 to 24 bits for floats
   final_mantissa >>= 1;
-  if ((final_mantissa >> (fputil::FloatProperties<T>::MANTISSA_WIDTH + 1)) >
+  if ((final_mantissa >> (fputil::FloatProperties<T>::MANTISSA_WIDTH + 1)) >// FLOAT80 MANTISSA
       0) {
     final_mantissa >>= 1;
     ++exp2;
@@ -210,7 +210,7 @@ eisel_lemire(ExpandedFloat<T> init_num,
 
   // The if block is equivalent to (but has fewer branches than):
   //   if exp2 <= 0 || exp2 >= 0x7FF { etc }
-  if (exp2 - 1 >= (1 << fputil::FloatProperties<T>::EXPONENT_WIDTH) - 2) {
+  if (exp2 - 1 >= (1 << fputil::FloatProperties<T>::EXPONENT_WIDTH) - 2) {// FLOAT80 MANTISSA
     return cpp::nullopt;
   }
 
@@ -291,7 +291,7 @@ eisel_lemire<long double>(ExpandedFloat<long double> init_num,
   // it's 12 bits for 128 bit floats in this case.
   constexpr UInt128 HALFWAY_CONSTANT =
       (UInt128(1) << (BITS_IN_MANTISSA -
-                      fputil::FloatProperties<long double>::MANTISSA_WIDTH -
+                      fputil::FloatProperties<long double>::MANTISSA_WIDTH -// FLOAT80 MANTISSA
                       3)) -
       1;
 
@@ -306,7 +306,7 @@ eisel_lemire<long double>(ExpandedFloat<long double> init_num,
   BitsType final_mantissa =
       final_approx_upper >>
       (msb + BITS_IN_MANTISSA -
-       (fputil::FloatProperties<long double>::MANTISSA_WIDTH + 3));
+       (fputil::FloatProperties<long double>::MANTISSA_WIDTH + 3));// FLOAT80 MANTISSA
   exp2 -= static_cast<uint32_t>(1 ^ msb); // same as !msb
 
   if (round == RoundDirection::Nearest) {
@@ -332,7 +332,7 @@ eisel_lemire<long double>(ExpandedFloat<long double> init_num,
   // floats
   final_mantissa >>= 1;
   if ((final_mantissa >>
-       (fputil::FloatProperties<long double>::MANTISSA_WIDTH + 1)) > 0) {
+       (fputil::FloatProperties<long double>::MANTISSA_WIDTH + 1)) > 0) {// FLOAT80 MANTISSA
     final_mantissa >>= 1;
     ++exp2;
   }
@@ -392,7 +392,7 @@ simple_decimal_conversion(const char *__restrict numStart,
   if (hpd.get_decimal_point() < 0 &&
       exp10_to_exp2(-hpd.get_decimal_point()) >
           static_cast<int64_t>(fputil::FloatProperties<T>::EXPONENT_BIAS +
-                               fputil::FloatProperties<T>::MANTISSA_WIDTH)) {
+                               fputil::FloatProperties<T>::MANTISSA_WIDTH)) {// FLOAT80 MANTISSA
     output.num = {0, 0};
     output.error = ERANGE;
     return output;
@@ -441,7 +441,7 @@ simple_decimal_conversion(const char *__restrict numStart,
   }
 
   // Shift left to fill the mantissa
-  hpd.shift(fputil::FloatProperties<T>::MANTISSA_WIDTH);
+  hpd.shift(fputil::FloatProperties<T>::MANTISSA_WIDTH);// FLOAT80 MANTISSA
   typename fputil::FPBits<T>::UIntType final_mantissa =
       hpd.round_to_integer_type<typename fputil::FPBits<T>::UIntType>();
 
@@ -459,14 +459,14 @@ simple_decimal_conversion(const char *__restrict numStart,
         hpd.round_to_integer_type<typename fputil::FPBits<T>::UIntType>(round);
 
     // Check if by shifting right we've caused this to round to a normal number.
-    if ((final_mantissa >> fputil::FloatProperties<T>::MANTISSA_WIDTH) != 0) {
+    if ((final_mantissa >> fputil::FloatProperties<T>::MANTISSA_WIDTH) != 0) {// FLOAT80 MANTISSA
       ++exp2;
     }
   }
 
   // Check if rounding added a bit, and shift down if that's the case.
   if (final_mantissa == typename fputil::FPBits<T>::UIntType(2)
-                            << fputil::FloatProperties<T>::MANTISSA_WIDTH) {
+                            << fputil::FloatProperties<T>::MANTISSA_WIDTH) {// FLOAT80 MANTISSA
     final_mantissa >>= 1;
     ++exp2;
 
@@ -567,7 +567,7 @@ clinger_fast_path(ExpandedFloat<T> init_num,
   typename fputil::FPBits<T>::UIntType mantissa = init_num.mantissa;
   int32_t exp10 = init_num.exponent;
 
-  if (mantissa >> fputil::FloatProperties<T>::MANTISSA_WIDTH > 0) {
+  if (mantissa >> fputil::FloatProperties<T>::MANTISSA_WIDTH > 0) {// FLOAT80 MANTISSA
     return cpp::nullopt;
   }
 
@@ -669,7 +669,7 @@ template <> constexpr int32_t get_upper_bound<double>() { return 309; }
 // end of the final mantissa.
 template <typename T> constexpr int32_t get_lower_bound() {
   return -(static_cast<int32_t>(fputil::FloatProperties<T>::EXPONENT_BIAS +
-                                fputil::FloatProperties<T>::MANTISSA_WIDTH +
+                                fputil::FloatProperties<T>::MANTISSA_WIDTH +// FLOAT80 MANTISSA
                                 (sizeof(T) * 8)) /
            3);
 }
@@ -799,7 +799,7 @@ LIBC_INLINE FloatConvertReturn<T> binary_exp_to_float(ExpandedFloat<T> init_num,
   }
 
   uint32_t amount_to_shift_right =
-      NUMBITS - fputil::FloatProperties<T>::MANTISSA_WIDTH - 1;
+      NUMBITS - fputil::FloatProperties<T>::MANTISSA_WIDTH - 1;// FLOAT80 MANTISSA
 
   // Handle subnormals.
   if (biased_exponent <= 0) {

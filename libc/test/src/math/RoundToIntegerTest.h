@@ -193,7 +193,7 @@ public:
     bits.set_unbiased_exponent(EXPONENT_LIMIT + FPBits::EXPONENT_BIAS);
     bits.set_sign(1);
     bits.set_mantissa(UIntType(0x1)
-                      << (LIBC_NAMESPACE::fputil::MantissaWidth<F>::VALUE - 1));
+                      << (LIBC_NAMESPACE::fputil::MantissaWidth<F>::VALUE - 1));// FLOAT80 MANTISSA
 
     F x = F(bits);
     if (TestModes) {

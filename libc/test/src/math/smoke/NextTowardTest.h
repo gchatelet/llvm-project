@@ -33,7 +33,7 @@ template <typename T>
 class NextTowardTestTemplate : public LIBC_NAMESPACE::testing::Test {
   using FPBits = LIBC_NAMESPACE::fputil::FPBits<T>;
   using ToFPBits = LIBC_NAMESPACE::fputil::FPBits<long double>;
-  using MantissaWidth = LIBC_NAMESPACE::fputil::MantissaWidth<T>;
+  using MantissaWidth = LIBC_NAMESPACE::fputil::MantissaWidth<T>;// FLOAT80 MANTISSA
   using UIntType = typename FPBits::UIntType;
 
   static constexpr int BIT_WIDTH_OF_TYPE =
@@ -190,7 +190,7 @@ public:
     ASSERT_EQ(result_bits.get_unbiased_exponent(),
               uint16_t(x_bits.get_unbiased_exponent() - 1));
     ASSERT_EQ(result_bits.get_mantissa(),
-              (UIntType(1) << MantissaWidth::VALUE) - 1);
+              (UIntType(1) << MantissaWidth::VALUE) - 1);// FLOAT80 MANTISSA
 
     result = func(x, 33.0);
     result_bits = FPBits(result);
@@ -205,7 +205,7 @@ public:
     ASSERT_EQ(result_bits.get_unbiased_exponent(),
               uint16_t(x_bits.get_unbiased_exponent() - 1));
     ASSERT_EQ(result_bits.get_mantissa(),
-              (UIntType(1) << MantissaWidth::VALUE) - 1);
+              (UIntType(1) << MantissaWidth::VALUE) - 1);// FLOAT80 MANTISSA
 
     result = func(x, -33.0);
     result_bits = FPBits(result);

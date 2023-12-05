@@ -72,7 +72,7 @@ LIBC_INLINE cpp::enable_if_t<cpp::is_floating_point_v<T>, T> sqrt(T x) {
   } else {
     // IEEE floating points formats.
     using UIntType = typename FPBits<T>::UIntType;
-    constexpr UIntType ONE = UIntType(1) << MantissaWidth<T>::VALUE;
+    constexpr UIntType ONE = UIntType(1) << MantissaWidth<T>::VALUE; // FLOAT80 MANTISSA
 
     FPBits<T> bits(x);
 
@@ -147,7 +147,7 @@ LIBC_INLINE cpp::enable_if_t<cpp::is_floating_point_v<T>, T> sqrt(T x) {
       // Remove hidden bit and append the exponent field.
       x_exp = ((x_exp >> 1) + FPBits<T>::EXPONENT_BIAS);
 
-      y = (y - ONE) | (static_cast<UIntType>(x_exp) << MantissaWidth<T>::VALUE);
+      y = (y - ONE) | (static_cast<UIntType>(x_exp) << MantissaWidth<T>::VALUE); // FLOAT80 MANTISSA
 
       switch (quick_get_round()) {
       case FE_TONEAREST:

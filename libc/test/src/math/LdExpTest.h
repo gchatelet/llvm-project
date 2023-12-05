@@ -24,7 +24,7 @@ class LdExpTestTemplate : public LIBC_NAMESPACE::testing::Test {
   using NormalFloat = LIBC_NAMESPACE::fputil::NormalFloat<T>;
   using UIntType = typename FPBits::UIntType;
   static constexpr UIntType MANTISSA_WIDTH =
-      LIBC_NAMESPACE::fputil::MantissaWidth<T>::VALUE;
+      LIBC_NAMESPACE::fputil::MantissaWidth<T>::VALUE;// FLOAT80 MANTISSA
   // A normalized mantissa to be used with tests.
   static constexpr UIntType MANTISSA = NormalFloat::ONE + 0x1234;
 
@@ -70,7 +70,7 @@ public:
   void testUnderflowToZeroOnNormal(LdExpFunc func) {
     // In this test, we pass a normal nubmer to func and expect zero
     // to be returned due to underflow.
-    int32_t base_exponent = FPBits::EXPONENT_BIAS + int32_t(MANTISSA_WIDTH);
+    int32_t base_exponent = FPBits::EXPONENT_BIAS + int32_t(MANTISSA_WIDTH);// FLOAT80 MANTISSA
     int32_t exp_array[] = {base_exponent + 5, base_exponent + 4,
                            base_exponent + 3, base_exponent + 2,
                            base_exponent + 1};
@@ -83,7 +83,7 @@ public:
   void testUnderflowToZeroOnSubnormal(LdExpFunc func) {
     // In this test, we pass a normal nubmer to func and expect zero
     // to be returned due to underflow.
-    int32_t base_exponent = FPBits::EXPONENT_BIAS + int32_t(MANTISSA_WIDTH);
+    int32_t base_exponent = FPBits::EXPONENT_BIAS + int32_t(MANTISSA_WIDTH);// FLOAT80 MANTISSA
     int32_t exp_array[] = {base_exponent + 5, base_exponent + 4,
                            base_exponent + 3, base_exponent + 2,
                            base_exponent + 1};
@@ -101,7 +101,7 @@ public:
         // Subnormal numbers
         NormalFloat(-FPBits::EXPONENT_BIAS, MANTISSA, 0),
         NormalFloat(-FPBits::EXPONENT_BIAS, MANTISSA, 1)};
-    for (int32_t exp = 0; exp <= static_cast<int32_t>(MANTISSA_WIDTH); ++exp) {
+    for (int32_t exp = 0; exp <= static_cast<int32_t>(MANTISSA_WIDTH); ++exp) {// FLOAT80 MANTISSA
       for (T x : val_array) {
         // We compare the result of ldexp with the result
         // of the native multiplication/division instruction.
@@ -135,7 +135,7 @@ public:
     ASSERT_EQ(result_bits.get_unbiased_exponent(), uint16_t(0));
     // But if the exp is so less that normalization leads to zero, then
     // the result should be zero.
-    result = func(x, -FPBits::MAX_EXPONENT - int(MANTISSA_WIDTH) - 5);
+    result = func(x, -FPBits::MAX_EXPONENT - int(MANTISSA_WIDTH) - 5);// FLOAT80 MANTISSA
     ASSERT_TRUE(FPBits(result).is_zero());
 
     // Start with a subnormal number but pass a very high number for exponent.

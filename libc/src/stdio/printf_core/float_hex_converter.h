@@ -40,7 +40,7 @@ LIBC_INLINE int convert_float_hex_exp(Writer *writer,
   bool is_inf_or_nan;
   uint32_t mantissa_width;
   if (to_conv.length_modifier == LengthModifier::L) {
-    mantissa_width = fputil::MantissaWidth<long double>::VALUE;
+    mantissa_width = fputil::MantissaWidth<long double>::VALUE;// FLOAT80 MANTISSA
     fputil::FPBits<long double>::UIntType float_raw = to_conv.conv_val_raw;
     fputil::FPBits<long double> float_bits(float_raw);
     is_negative = float_bits.get_sign();
@@ -48,7 +48,7 @@ LIBC_INLINE int convert_float_hex_exp(Writer *writer,
     mantissa = float_bits.get_explicit_mantissa();
     is_inf_or_nan = float_bits.is_inf_or_nan();
   } else {
-    mantissa_width = fputil::MantissaWidth<double>::VALUE;
+    mantissa_width = fputil::MantissaWidth<double>::VALUE;// FLOAT80 MANTISSA
     fputil::FPBits<double>::UIntType float_raw =
         static_cast<fputil::FPBits<double>::UIntType>(to_conv.conv_val_raw);
     fputil::FPBits<double> float_bits(float_raw);
@@ -86,7 +86,7 @@ LIBC_INLINE int convert_float_hex_exp(Writer *writer,
   // for the extra implicit bit. We use the larger of the two possible values
   // since the size must be constant.
   constexpr size_t MANT_BUFF_LEN =
-      (fputil::MantissaWidth<long double>::VALUE / BITS_IN_HEX_DIGIT) + 1;
+      (fputil::MantissaWidth<long double>::VALUE / BITS_IN_HEX_DIGIT) + 1;// FLOAT80 MANTISSA
   char mant_buffer[MANT_BUFF_LEN];
 
   size_t mant_len = (mantissa_width / BITS_IN_HEX_DIGIT) + 1;

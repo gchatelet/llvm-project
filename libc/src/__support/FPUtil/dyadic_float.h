@@ -83,7 +83,7 @@ template <size_t Bits> struct DyadicFloat {
   // Assume that it is already normalized and output is not underflow.
   // Output is rounded correctly with respect to the current rounding mode.
   // TODO(lntue): Add support for underflow.
-  // TODO(lntue): Test or add specialization for x86 long double.
+  // TODO(lntue): Test or add specialization for x86 long double.  // FLOAT80 MANTISSA
   template <typename T, typename = cpp::enable_if_t<
                             cpp::is_floating_point_v<T> &&
                                 (FloatProperties<T>::MANTISSA_WIDTH < Bits),

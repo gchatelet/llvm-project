@@ -427,7 +427,7 @@ public:
     mantissa = float_bits.get_explicit_mantissa();
 
     // Adjust for the width of the mantissa.
-    exponent -= MANT_WIDTH;
+    exponent -= MANT_WIDTH; // FLOAT80 MANTISSA
 
     // init_convert();
   }
